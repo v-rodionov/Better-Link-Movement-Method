@@ -42,7 +42,7 @@ public class BetterLinkMovementMethod extends LinkMovementMethod {
   private int activeTextViewHashcode;
   private LongPressTimer ongoingLongPressTimer;
   private boolean wasLongPressRegistered;
-  private boolean isUrlHighlightEnabled = false;
+  private boolean isUrlHighlightEnabled = true;
 
   public interface OnLinkClickListener {
     /**
@@ -76,13 +76,16 @@ public class BetterLinkMovementMethod extends LinkMovementMethod {
    * @return The registered {@link BetterLinkMovementMethod} on the TextViews.
    */
   public static BetterLinkMovementMethod linkify(int linkifyMask, TextView... textViews) {
-    BetterLinkMovementMethod movementMethod = newInstance();
-    for (TextView textView : textViews) {
-      addLinks(linkifyMask, movementMethod, textView);
-    }
-    return movementMethod;
+    return linkify(true, linkifyMask, textViews);
   }
 
+  /**
+   * @param isUrlHighlightEnabled For enabling/disabling highlight when click
+   * @param linkifyMask One of {@link Linkify#ALL}, {@link Linkify#PHONE_NUMBERS}, {@link Linkify#MAP_ADDRESSES},
+   *                    {@link Linkify#WEB_URLS} and {@link Linkify#EMAIL_ADDRESSES}.
+   * @param textViews   The TextViews on which a {@link BetterLinkMovementMethod} should be registered.
+   * @return The registered {@link BetterLinkMovementMethod} on the TextViews.
+   */
   public static BetterLinkMovementMethod linkify(final boolean isUrlHighlightEnabled,
                                                  int linkifyMask,
                                                  TextView... textViews) {
