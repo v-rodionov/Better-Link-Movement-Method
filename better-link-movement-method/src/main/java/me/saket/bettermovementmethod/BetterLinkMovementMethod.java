@@ -42,6 +42,7 @@ public class BetterLinkMovementMethod extends LinkMovementMethod {
   private int activeTextViewHashcode;
   private LongPressTimer ongoingLongPressTimer;
   private boolean wasLongPressRegistered;
+  private boolean isUrlHighlightEnabled = false;
 
   public interface OnLinkClickListener {
     /**
@@ -76,6 +77,17 @@ public class BetterLinkMovementMethod extends LinkMovementMethod {
    */
   public static BetterLinkMovementMethod linkify(int linkifyMask, TextView... textViews) {
     BetterLinkMovementMethod movementMethod = newInstance();
+    for (TextView textView : textViews) {
+      addLinks(linkifyMask, movementMethod, textView);
+    }
+    return movementMethod;
+  }
+
+  public static BetterLinkMovementMethod linkify(final boolean isUrlHighlightEnabled,
+                                                 int linkifyMask,
+                                                 TextView... textViews) {
+    BetterLinkMovementMethod movementMethod = newInstance();
+    movementMethod.isUrlHighlightEnabled = isUrlHighlightEnabled;
     for (TextView textView : textViews) {
       addLinks(linkifyMask, movementMethod, textView);
     }
@@ -336,6 +348,8 @@ public class BetterLinkMovementMethod extends LinkMovementMethod {
    * Adds a background color span at <var>clickableSpan</var>'s location.
    */
   protected void highlightUrl(TextView textView, ClickableSpan clickableSpan, Spannable text) {
+    if (!isUrlHighlightEnabled) return;
+
     if (isUrlHighlighted) {
       return;
     }
